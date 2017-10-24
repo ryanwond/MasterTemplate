@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+    <link href="{{static_url("assets/plugins/font-awesome/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url("assets/plugins/bootstrap/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url("assets/plugins/uniform/css/uniform.default.css")}}" rel="stylesheet" type="text/css"/>
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    <link rel="stylesheet" type="text/css" href="{{static_url("assets/plugins/bootstrap-datepicker/css/datepicker.css")}}" />
+    <!-- END PAGE LEVEL SCRIPTS -->
+    <!-- BEGIN THEME STYLES -->
+    <link href="{{static_url("assets/css/style-metronic.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url("assets/css/style.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url("assets/css/style-responsive.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url("assets/css/plugins.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url("assets/css/themes/light.css")}}" rel="stylesheet" type="text/css" id="style_color"/>
+    <link href="{{static_url("assets/css/custom.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url("assets/css/error.css")}}" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript"> var channel_id = 1;</script>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+    {% module Template("head.html") %}
+    <!-- BEGIN CONTAINER -->
+    <div class="clearfix"></div>
+    <div class="page-container">
+        {% module Template("left.html") %}
+        <div class="page-content">
+            <div class="row">
+				<div class="col-md-12 page-404">
+					<div class="number">
+						{{status_code}}
+					</div>
+					<div class="details">
+						<p>
+							I'm sorry.<br />
+						</p>
+                        <button class="btn default red" onClick="javascript:history.back(-1);">返回</button>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+    <!-- END CONTAINER -->
+    <!-- BEGIN FOOTER -->
+    {% module Template("bottom.html") %}
+    <!-- END FOOTER -->
+    <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+    <!-- BEGIN CORE PLUGINS -->
+    <!--[if lt IE 9]>
+    <script src="{{static_url("assets/plugins/respond.min.js")}}"></script>
+    <script src="{{static_url("assets/plugins/excanvas.min.js")}}"></script>
+    <![endif]-->
+    <script src="{{static_url("assets/plugins/jquery-1.10.2.min.js")}}" type="text/javascript"></script>
+    <script src="{{static_url("assets/plugins/jquery-migrate-1.2.1.min.js")}}" type="text/javascript"></script>
+    <script src="{{static_url("assets/plugins/bootstrap/js/bootstrap.min.js")}}" type="text/javascript"></script>
+    <script src="{{static_url("assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
+    <script src="{{static_url("assets/plugins/jquery.blockui.min.js")}}" type="text/javascript"></script>
+    <script src="{{static_url("assets/plugins/jquery.cookie.min.js")}}" type="text/javascript"></script>
+    <script src="{{static_url("assets/plugins/uniform/jquery.uniform.min.js")}}" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script type="text/javascript" src="{{static_url("assets/plugins/jquery-validation/dist/jquery.validate.min.js")}}"></script>
+    <script type="text/javascript" src="{{static_url("assets/plugins/select2/select2.min.js")}}"></script>
+    <script type="text/javascript" src="{{static_url("assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js")}}"></script>
+    <script src="{{static_url("assets/plugins/bootstrap-markdown/js/bootstrap-markdown.js")}}" type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="{{static_url("assets/scripts/app.js")}}" type="text/javascript"></script>
+    <script src="{{static_url("assets/scripts/common.js")}}" type="text/javascript"></script>
+    <!-- END PAGE LEVEL SCRIPTS -->
+    <script>
+        jQuery(document).ready(function () {
+            App.init();
+        });
+    </script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>
