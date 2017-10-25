@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # __author__ = 'wangrui'
-from base import BaseHandler
+from .base import BaseHandler
 import tornado.web
-from tornado.escape import json_decode
 from tornado.escape import json_encode
+from documentdb.documentdb import *
+import os
+
+
 
 class IndexHandler(BaseHandler):
     @tornado.web.authenticated
@@ -15,49 +18,37 @@ class IndexHandler(BaseHandler):
 class GetMasterTemplateInfo(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        data = [
-            {
-                "id": "1",
-                "channel": "1",
-                "canvas": "1",
-                "preview_url": "1",
-                "description": "1",
-                "display_name": "11",
-                "is_single": "1",
-                "image_dimensions": "1",
-                "html_contents": "1",
-                "css_contents": "1",
-            },
-            {
-                "id": "2",
-                "channel": "2",
-                "canvas": "2",
-                "preview_url": "2",
-                "description": "2",
-                "display_name": "2",
-                "is_single": "2",
-                "image_dimensions": "2",
-                "html_contents": "2",
-                "css_contents": "2",
-            }
-        ]
-        aoData = json_decode(self.get_argument("aoData"))
-        sEcho = 0
-        iDisplayStart = 0
-        iDisplayLength = 0
-        for da in aoData:
-            if da["name"] == "sEcho":
-                sEcho = da["value"]
-            if da["name"] == "iDisplayStart":
-                iDisplayStart = da["value"]
-            if da["name"] == "iDisplayLength":
-                iDisplayLength = da["value"]
-        total = 10
+        document_instance = DocumentDB()
+        document_data = document_instance.read_document()
+        self.write(json_encode(document_data))
 
-        initEcho = sEcho + 1
-        return_data = dict()
-        return_data["sEcho"] = initEcho
-        return_data["iTotalRecords"] = total
-        return_data["iTotalDisplayRecords"] = total
-        return_data["aaData"] = data
-        self.write(json_encode(return_data))
+
+class OperateMasterTemplate(BaseHandler):
+    @tornado.web.authenticated
+    def post(self):
+        param = self.parse_param()
+        if self.request.files:
+            png_file = self.request.files.get('png_file', None)
+            file_name = png_file[0]["filename"]
+            temp_dir = os.path.join("static", "upload")
+            upload_dir = os.path.join(os.getcwd(), temp_dir)
+            if not os.path.exists(upload_dir):
+                os.makedirs(upload_dir)
+            file_path = os.path.join(upload_dir, file_name)
+            with open(file_path, 'wb') as f:
+                f.write(png_file[0]["body"])
+            param["preview_url"] = os.path.join(PNG_URL, os.path.join(temp_dir, file_name))
+
+        document_instance = DocumentDB()
+        result = document_instance.operate_document(param)
+        self.write(json_encode(result))
+
+
+class DeleteMasterTemplate(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        master_id = self.get_argument("master_id")
+        document_instance = DocumentDB()
+        result = document_instance.delete_document(master_id)
+        print("result", result)
+        self.write(json_encode(result))

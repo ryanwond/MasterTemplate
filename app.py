@@ -25,6 +25,8 @@ class Application(tornado.web.Application):
             (r"/login", login.LoginHandler),
             (r"/exit", login.ExitHandler),
             (r"/getmastertemplateinfo", mastertemplate.GetMasterTemplateInfo),
+            (r"/operate", mastertemplate.OperateMasterTemplate),
+            (r"/delete", mastertemplate.DeleteMasterTemplate),
             (r".*", base.BaseHandler),
         ]
 
@@ -41,7 +43,7 @@ class Application(tornado.web.Application):
 
 def main():
     tornado.options.parse_command_line()
-    print "Starting server on port %d" % options.port
+    print("Starting server on port %d" % options.port)
     http_server = Application()
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()

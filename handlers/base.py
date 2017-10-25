@@ -5,6 +5,12 @@ from tornado.web import RequestHandler
 
 
 class BaseHandler(RequestHandler):
+    def parse_param(self):
+        param_dict = {}
+        for args in self.request.arguments:
+            param_dict[args] = self.get_argument(args)
+        return param_dict
+
     def get_current_user(self):
         user = self.get_cookie("user_session")
         if not user:

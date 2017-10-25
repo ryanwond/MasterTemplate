@@ -3,7 +3,7 @@
 # __author__ = 'wangrui'
 from tornado.web import RequestHandler
 from tornado.escape import json_encode
-from base import BaseHandler
+from .base import BaseHandler
 import tornado.web
 import hashlib
 
@@ -19,7 +19,7 @@ class LoginHandler(RequestHandler):
     def post(self):
         username = self.get_argument("username")
         password = self.get_argument("password")
-        password_md5 = hashlib.md5(password).hexdigest()
+        password_md5 = hashlib.md5(password.encode('utf8')).hexdigest()
         data = {
             "status": "success",
             'errno': 0,
