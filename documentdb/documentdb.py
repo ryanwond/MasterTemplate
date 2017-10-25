@@ -16,6 +16,7 @@ class DocumentDB(object):
         self.collection = None
         self.document = None
         self.database_link = ""
+        self.collection_link = ""
         self.init_host()
         self.read_database()
         self.read_collection()
@@ -41,8 +42,8 @@ class DocumentDB(object):
         # self.collection = next((coll for coll in self.client.ReadCollections(self.db['_self']) if coll['id'] == DOCUMENTDB_COLLECTION))
         # print(self.collection)
         try:
-            collection_link = self.database_link + '/colls/{0}'.format(DOCUMENTDB_COLLECTION)
-            self.collection = self.client.ReadCollection(collection_link)
+            self.collection_link = self.database_link + '/colls/{0}'.format(DOCUMENTDB_COLLECTION)
+            self.collection = self.client.ReadCollection(self.collection_link)
             print('Collection with id \'{0}\' was found, it\'s _self is {1}'.format(DOCUMENTDB_COLLECTION, self.collection['_self']))
         except errors.DocumentDBError as e:
             if e.status_code == 404:
@@ -51,13 +52,14 @@ class DocumentDB(object):
                 raise errors.HTTPFailure(e.status_code)
 
     def read_document(self):
-        document = list(self.client.ReadDocuments(self.collection['_self']))
+        document = list(self.client.ReadDocuments(self.collection_link))
         return document
 
     def operate_document(self, kwargs):
         result = {"status": "fail"}
+
         if kwargs.get('id') == '':
-            create_result = self.client.CreateDocument(self.collection['_self'], kwargs)
+            create_result = self.client.CreateDocument(self.collection_link, kwargs)
             if create_result:
                 result["status"] = "success"
         else:
