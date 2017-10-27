@@ -55,17 +55,24 @@ class DocumentDB(object):
         document = list(self.client.ReadDocuments(self.collection_link))
         return document
 
+    def read_one_document(self, master_id):
+        document_link = self.database_link + '/colls/{0}'.format(DOCUMENTDB_COLLECTION) + '/docs/' + master_id
+        return dict(self.client.ReadDocument(document_link))
+
     def operate_document(self, kwargs):
         result = {"status": "fail"}
 
-        if kwargs.get('id') == '':
-            create_result = self.client.CreateDocument(self.collection_link, kwargs)
-            if create_result:
-                result["status"] = "success"
-        else:
-            document_link = self.database_link + '/colls/{0}'.format(DOCUMENTDB_COLLECTION) + '/docs/' + kwargs.get('id')
+        if kwargs.get('id'):
+            document_link = self.database_link + '/colls/{0}'.format(DOCUMENTDB_COLLECTION) + '/docs/' + kwargs.get(
+                'id')
             replaced_document = self.client.ReplaceDocument(document_link, kwargs)
             if replaced_document:
+                result["id"] = replaced_document["id"]
+                result["status"] = "success"
+        else:
+            create_result = self.client.CreateDocument(self.collection_link, kwargs)
+            if create_result:
+                result["id"] = create_result["id"]
                 result["status"] = "success"
         return result
 

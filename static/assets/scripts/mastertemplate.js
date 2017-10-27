@@ -6,6 +6,8 @@
 var $add = $("#add");
 var $master_template_modal = $("#master_template_modal");
 var $master_del_modal = $("#master_del_modal");
+var $metadatas_modal = $("#metadatas_modal");
+
 var $template_id = $("#id");
 var $channel = $("#channel");
 var $canvas = $("#canvas");
@@ -18,6 +20,15 @@ var $html_contents = $("#html_contents");
 var $css_contents = $("#css_contents");
 var $show = $("#show");
 
+var $name = $("#name");
+var $m_display_name = $("#m_display_name");
+var $enable = $("#enable");
+var $mock_value = $("#mock_value");
+var $field_name = $("#field_name");
+var $field_type = $("#field_type");
+var $css = $("#css");
+
+var G_METADATAS = {};
 
 $add.on("click", function (e) {
     e.preventDefault();
@@ -49,12 +60,26 @@ function checkFile(files){
         $show.html("Is not image.");
         return false;
     }
-    console.log('111111');
     reader.onload = function(e){
         $show.html('<img src="'+e.target.result+'" alt="img" height="200" width="200"/>');
     }
     reader.readAsDataURL(file);
 }
+
+var UploadMetaData = function(template_id){
+    var success = function(data){
+        if(data["status"] == "success"){
+                GetMasterTemplateInfo();
+                G_METADATAS = {};
+        }
+    }
+    var data = {
+        master_id: template_id,
+        metadatas: JSON.stringify(G_METADATAS)
+    }
+    if (Object.keys(G_METADATAS).length != 0)
+        my_ajax(true, '/uploadmetadatas', 'post', data, false, success);
+};
 
 $("#btn_submit").on("click", function (e) {
     e.preventDefault();
@@ -77,6 +102,7 @@ $("#btn_submit").on("click", function (e) {
                 html_contents: $html_contents.val(),
                 css_contents: $css_contents.val()
             },
+
             dataType: 'json',
             success: function (data, status){
                 App.unblockUI($page_content);
@@ -84,7 +110,7 @@ $("#btn_submit").on("click", function (e) {
                     alert_message($("#error_modal"), 0, 'Operate Fail.');
                 }
 
-                GetMasterTemplateInfo();
+                UploadMetaData(data["id"]);
             },
             error: function (XMLHttpRequest) {
                 error_func(XMLHttpRequest);
@@ -92,8 +118,7 @@ $("#btn_submit").on("click", function (e) {
         }
     );
 });
-
-var COMMON_DATA = {}
+var COMMON_DATA = {};
 
 var GetMasterTemplateInfo = function(){
     var ajax_source = "/getmastertemplateinfo";
@@ -106,7 +131,7 @@ var GetMasterTemplateInfo = function(){
             str_html += "<td>" + data[i]["channel"] + "</td>";
             str_html += "<td>" + data[i]["canvas"] + "</td>";
 //            str_html += "<td>" + data[i]["preview_url"] + "</td>";
-            str_html += "<td><img src='" + data[i]["preview_url"] + "' height=\"200\" width=\"200\"/></td>";
+            str_html += "<td><img src='" + data[i]["preview_url"] + "' height=\"100\" width=\"100\"/></td>";
             str_html += "<td>" + data[i]["description"] + "</td>";
             str_html += "<td>" + data[i]["display_name"] + "</td>";
             str_html += "<td>" + data[i]["is_single"] + "</td>";
@@ -126,6 +151,39 @@ var GetMasterTemplateInfo = function(){
 
 GetMasterTemplateInfo();
 
+var Display_Metadatas = function(){
+    var str_html = "";
+    for(var d in G_METADATAS){
+        str_html += "<tr>";
+        str_html += "<td>" + d + "</td>";
+        str_html += "<td>";
+        str_html += '<a onclick="mod_meta(' + "'" + d + "'" + ')"' + 'class="btn default btn-xs" data-toggle="modal"> <i class="fa fa-edit"></i></a>';
+        str_html += '&nbsp; <a onclick="del_meta(' + "'" + d + "'" + ')"' + 'class="btn default btn-xs red" data-toggle="modal"> <i class="fa fa-trash-o"></i></a>';
+        str_html += "</td>"
+        str_html += "</tr>";
+    }
+    $("#metadatas_table").html(str_html);
+}
+
+var del_meta = function(name){
+    delete G_METADATAS[name];
+    Display_Metadatas();
+}
+
+var mod_meta = function(name){
+    $name.val(name);
+    $name.attr("disabled", true);
+    var temp_meta = G_METADATAS[name];
+    $m_display_name.val(temp_meta["display_name"]);
+    $mock_value.val(temp_meta["mock_value"]);
+    $field_name.val(temp_meta["field_name"]);
+    $field_type.val(temp_meta["field_type"]);
+    $css.val(temp_meta["css"]);
+    $enable.val(temp_meta["enable"]);
+    $metadatas_modal.modal("show");
+}
+
+
 var mod_master = function (d_id) {
     $template_id.val(d_id);
     var master_data = COMMON_DATA[d_id];
@@ -138,6 +196,11 @@ var mod_master = function (d_id) {
     $html_contents.val(master_data["html_contents"]);
     $css_contents.val(master_data["css_contents"]);
     $show.html('<img src="'+master_data["preview_url"]+'" alt="no image" height="200" width="200"/>');
+    console.log(master_data);
+    if(master_data.hasOwnProperty("metadatas")){
+        G_METADATAS = master_data["metadatas"];
+    }
+    Display_Metadatas();
     $master_template_modal.modal("show");
 };
 
@@ -160,3 +223,45 @@ var func_del_master = function(d_id){
     }
     my_ajax(true, '/delete', 'get', req_data, true, success);
 }
+
+
+$("#add_metadatas").on("click", function(e){
+    e.preventDefault();
+    $name.attr("disabled", false);
+    $name.val("");
+    $m_display_name.val("");
+    $mock_value.val("");
+    $field_name.val("");
+    $field_type.val("");
+    $css.val("");
+    $enable.val("true");
+    $metadatas_modal.modal("show");
+});
+
+
+$("#btn_confirm").on("click", function(e){
+    e.preventDefault();
+    var name = $name.val();
+    if (name.length == 0){
+        return false;
+    }
+    var meta_data = {
+        "@": "mst.render.template_metadata",
+        "name": name,
+        "display_name": $m_display_name.val(),
+        "enable": $enable.val(),
+        "mock_value": $mock_value.val(),
+        "field_name": $field_name.val(),
+        "field_type": $field_type.val(),
+        "css": $css.val()
+    };
+    G_METADATAS[name] = meta_data;
+    Display_Metadatas();
+    console.log(G_METADATAS);
+    $metadatas_modal.modal("hide");
+});
+
+$("#btn_cancel").on("click", function(e){
+    e.preventDefault();
+    $metadatas_modal.modal("hide");
+})

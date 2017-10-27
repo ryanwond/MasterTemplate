@@ -105,9 +105,10 @@
                                 </div>
                             </div>
                             <div id="master_template_modal" class="modal fade">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-wide">
                                     <form id="master_template_form" action="#" class="form-horizontal">
                                         <input type="hidden" name="id" id="id" value="">
+
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close"
@@ -179,8 +180,8 @@
                                                                 class="required">*</span></label>
                                                         <div class="col-md-6">
                                                             <select id="is_single" name="is_single" class="form-control input_medium">
-                                                                <option value="true">True</option>
-                                                                <option value="false">False</option>
+                                                                <option value="true">true</option>
+                                                                <option value="false">false</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -213,6 +214,137 @@
                                                             <textarea class="form-control" name="css_contents" id="css_contents" rows="5">
 
                                                             </textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3">Metadatas<span
+                                                                class="required">*</span></label>
+                                                        <div class="col-md-6">
+
+                                                            <table class="table table-bordered table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Operate</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="metadatas_table">
+                                                                </tbody>
+                                                            </table>
+                                                            <a id="add_metadatas" class="btn green" data-toggle="modal">
+                                                                Add <i class="fa fa-plus"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div id="metadatas_modal" class="modal fade">
+                                                        <div class="modal-dialog">
+                                                            <form id="" action="#" class="form-horizontal">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close"
+                                                                                data-dismiss="modal"></button>
+                                                                        <h4 class="modal-title">Metadatas Info</h4>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="form-body">
+                                                                            <div class="alert alert-danger display-hide">
+                                                                                    <button class="close" data-close="alert"></button>
+                                                                                    <span>Name is Required.</span>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label class="control-label col-md-3">Name<span
+                                                                                        class="required">*</span></label>
+                                                                                <div class="col-md-6">
+
+                                                                                    <div class="input-icon">
+                                                                                        <i class="fa fa-comment-o"></i>
+                                                                                        <input class="form-control" name="name" id="name"
+                                                                                               placeholder="name" type="text"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label class="control-label col-md-3">display_name<span
+                                                                                        class="required">*</span></label>
+                                                                                <div class="col-md-6">
+
+                                                                                    <div class="input-icon">
+                                                                                        <i class="fa fa-comment-o"></i>
+                                                                                        <input class="form-control" name="m_display_name" id="m_display_name"
+                                                                                               placeholder="display_name" type="text"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label class="control-label col-md-3">Enable<span
+                                                                                        class="required">*</span></label>
+                                                                                <div class="col-md-6">
+
+                                                                                        <select id="enable" name="enable" class="form-control input_medium">
+                                                                                            <option value="true">true</option>
+                                                                                            <option value="false">false</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label class="control-label col-md-3">mock_value<span
+                                                                                        class="required">*</span></label>
+                                                                                <div class="col-md-6">
+
+                                                                                    <div class="input-icon">
+                                                                                        <i class="fa fa-comment-o"></i>
+                                                                                        <input class="form-control" name="mock_value" id="mock_value"
+                                                                                               placeholder="mock_value" type="text"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label class="control-label col-md-3">field_name<span
+                                                                                        class="required">*</span></label>
+                                                                                <div class="col-md-6">
+
+                                                                                    <div class="input-icon">
+                                                                                        <i class="fa fa-comment-o"></i>
+                                                                                        <input class="form-control" name="field_name" id="field_name"
+                                                                                               placeholder="field_name" type="text"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label class="control-label col-md-3">field_type<span
+                                                                                        class="required">*</span></label>
+                                                                                <div class="col-md-6">
+
+                                                                                    <div class="input-icon">
+                                                                                        <i class="fa fa-comment-o"></i>
+                                                                                        <input class="form-control" name="field_type" id="field_type"
+                                                                                               placeholder="field_type" type="text"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label class="control-label col-md-3">css<span
+                                                                                        class="required">*</span></label>
+                                                                                <div class="col-md-6">
+
+                                                                                    <div class="input-icon">
+                                                                                        <i class="fa fa-comment-o"></i>
+                                                                                        <input class="form-control" name="css" id="css"
+                                                                                               placeholder="css" type="text"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button class="btn" id="btn_cancel" aria-hidden="true">Cancel
+                                                                        </button>
+                                                                        <button type="button" id="btn_confirm" class="btn green">Confirm<i
+                                                                            class="fa fa-check"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>

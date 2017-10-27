@@ -27,6 +27,7 @@ class Application(tornado.web.Application):
             (r"/getmastertemplateinfo", mastertemplate.GetMasterTemplateInfo),
             (r"/operate", mastertemplate.OperateMasterTemplate),
             (r"/delete", mastertemplate.DeleteMasterTemplate),
+            (r"/uploadmetadatas", mastertemplate.UploadMetaDatas),
             (r".*", base.BaseHandler),
         ]
 
